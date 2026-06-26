@@ -1,0 +1,24 @@
+// Default (light) theme — the baseline applied on :root. Maps the semantic
+@mixin default-light {
+  --secondary: var(--white); // aka primary-0
+  --primary-25: var(--graphite-25);
+  --primary-50: var(--graphite-50);
+  --primary-70: var(--graphite-70);
+  --primary-100: var(--graphite-100);
+  --primary-200: var(--graphite-200);
+  --primary-300: var(--graphite-300);
+  --primary-400: var(--graphite-400);
+  --primary-600: var(--graphite-600);
+  --primary-700: var(--graphite-700);
+  --primary-800: var(--graphite-800);
+  --primary-850: var(--graphite-850);
+  --primary-900: var(--graphite-900);
+  --primary-950: var(--graphite-950);
+  --primary: var(--graphite); // aka primary-1000
+
+  color-scheme: light;
+}
+
+:root {
+  @include default-light;
+}
