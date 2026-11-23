@@ -1,5 +1,6 @@
 """Background poller: every POLL_INTERVAL fetch ESPN, rebuild the snapshot, write JSON, cache it."""
 import asyncio
+import json
 import logging
 
 from . import config, espn_client, snapshot
@@ -11,8 +12,16 @@ class TournamentState:
     """Holds the latest good snapshot in memory for the API to serve."""
 
     def __init__(self) -> None:
-        self.snapshot: dict | None = None
+        self.snapshot: dict | None = self._load_last_written()
         self.last_error: str | None = None
+
+    @staticmethod
+    def _load_last_written() -> dict | None:
+        # Survive restarts while ESPN is down: serve the last snapshot write_snapshot() left on disk.
+        try:
+            return json.loads((config.RESULTS_DIR / "tournament.json").read_text(encoding="utf-8"))
+        except (OSError, ValueError):
+            return None
 
     async def refresh_once(self) -> None:
         scoreboard, standings, match_numbers = await espn_client.fetch_raw()
